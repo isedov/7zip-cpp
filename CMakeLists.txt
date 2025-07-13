@@ -6,6 +6,10 @@ file(GLOB 7ZPP_SOURCES  ${PROJECT_SOURCE_DIR}/7zpp/*.cpp )
 add_library(7zpp ${7ZPP_SOURCES})
 target_include_directories(7zpp PRIVATE  ${PROJECT_SOURCE_DIR}   ${PROJECT_SOURCE_DIR}/7zpp ${PROJECT_SOURCE_DIR}/7z/C  ${PROJECT_SOURCE_DIR}/7z/CPP)
 
+if(WIN32)
+    target_compile_definitions(7zpp PRIVATE _UNICODE UNICODE)
+endif()
+
 set(Boost_USE_STATIC_LIBS ON) 
 set(Boost_USE_MULTITHREADED ON)  
 find_package(Boost COMPONENTS filesystem ) 
