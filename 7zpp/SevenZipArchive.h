@@ -22,6 +22,9 @@ namespace SevenZip
 		virtual void SetCompressionLevel(const CompressionLevelEnum& level);
 		virtual CompressionLevelEnum GetCompressionLevel();
 
+		virtual void SetEncryptHeaders(bool encryptHeaders);
+		virtual bool GetEncryptHeaders();
+
 		virtual bool DetectCompressionFormat();
 
 		virtual size_t GetNumberOfItems();
@@ -40,6 +43,7 @@ namespace SevenZip
 		std::vector<std::wstring> m_itemnames;
 		std::vector<size_t> m_origsizes;
 		TString m_password;
+		bool m_EncryptHeaders = false;
 
 	private:
 		bool pri_GetNumberOfItems();

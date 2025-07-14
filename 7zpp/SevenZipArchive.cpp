@@ -37,6 +37,16 @@ namespace SevenZip
 		return m_compressionLevel;
 	}
 
+	void SevenZipArchive::SetEncryptHeaders(bool encryptHeaders)
+	{
+		m_EncryptHeaders = encryptHeaders;
+	}
+
+	bool SevenZipArchive::GetEncryptHeaders()
+	{
+		return m_EncryptHeaders;
+	}
+
 	CompressionFormatEnum SevenZipArchive::GetCompressionFormat()
 	{
 		if (!m_ReadMetadata && !m_OverrideCompressionFormat)

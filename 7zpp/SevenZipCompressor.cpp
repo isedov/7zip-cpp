@@ -161,9 +161,15 @@ bool SevenZipCompressor::SetCompressionProperties(IUnknown* outArchive) const
 		return false;
 	}
 
-	const size_t numProps = 1;
-	const wchar_t* names[numProps] = { L"x" };
-	CPropVariant values[numProps] = { static_cast< UInt32 >( m_compressionLevel.GetValue() ) };
+	const size_t numProps = 2;
+	const wchar_t* names[numProps];
+	CPropVariant values[numProps];
+
+	names[0] = { L"x" };
+	values[0] = { static_cast< UInt32 >( m_compressionLevel.GetValue() ) };
+
+	names[1] = { L"he" };
+	values[1] = { m_EncryptHeaders };
 
 	CComPtr< ISetProperties > setter;
 	outArchive->QueryInterface( IID_ISetProperties, reinterpret_cast< void** >( &setter ) );
