@@ -90,7 +90,10 @@ bool SevenZipCompressor::DoCompress(ProgressCallback* callback /*= nullptr*/)
 		return false;
 	}
 
-	SetCompressionProperties(archiver);
+	if (!SetCompressionProperties(archiver))
+	{
+		return false;
+	}
 
 	//Set full outputFilePath including ending
 	m_archivePath += UsefulFunctions::EndingFromCompressionFormat(m_compressionFormat);
@@ -192,9 +195,13 @@ bool SevenZipCompressor::SetCompressionProperties(IUnknown* outArchive) const
 		++numProps;
 	}
 
-	names[numProps] = L"he";
-	values[numProps] = m_EncryptHeaders;
-	++numProps;
+	// Only the 7z handler knows "he"; sending it unconditionally would make Zip reject the whole list.
+	if ( m_EncryptHeaders )
+	{
+		names[numProps] = L"he";
+		values[numProps] = true;
+		++numProps;
+	}
 
 	CComPtr< ISetProperties > setter;
 	outArchive->QueryInterface( IID_ISetProperties, reinterpret_cast< void** >( &setter ) );
