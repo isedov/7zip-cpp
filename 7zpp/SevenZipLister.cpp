@@ -39,6 +39,11 @@ namespace SevenZip
 	bool SevenZipLister::ListArchive(const CComPtr< IStream >& archiveStream, const TString& password, ListCallback* callback)
 	{
 		CComPtr< IInArchive > archive = UsefulFunctions::GetArchiveReader(m_library, m_compressionFormat);
+		if (!archive)
+		{
+			return false;	//Format not supported
+		}
+
 		CComPtr< InStreamWrapper > inFile = new InStreamWrapper(archiveStream);
 		CComPtr< ArchiveOpenCallback > openCallback = new ArchiveOpenCallback(password);
 
