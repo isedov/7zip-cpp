@@ -178,10 +178,12 @@ STDMETHODIMP ArchiveExtractCallback::PrepareOperation( Int32 askExtractMode )
 
 STDMETHODIMP ArchiveExtractCallback::SetOperationResult( Int32 operationResult )
 {
+	const bool succeeded = operationResult == NArchive::NExtract::NOperationResult::kOK;
+
 	if ( m_absPath.empty() )
 	{
 		EmitDoneCallback();
-		return CheckBreak();
+		return succeeded ? CheckBreak() : E_FAIL;
 	}
 
 	if ( m_hasModifiedTime )
@@ -197,6 +199,11 @@ STDMETHODIMP ArchiveExtractCallback::SetOperationResult( Int32 operationResult )
 	if ( m_hasAttrib )
 	{
 		SetFileAttributes( m_absPath.c_str(), m_attrib );
+	}
+
+	if ( !succeeded )
+	{
+		return E_FAIL;
 	}
 
 	EmitFileDoneCallback(m_absPath);
