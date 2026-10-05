@@ -20,6 +20,8 @@ const TString SearchPatternAllFiles = _T( "*" );
 SevenZipCompressor::SevenZipCompressor(const SevenZipLibrary& library, const TString& archivePath)
 	: SevenZipArchive(library, archivePath)
 	, m_absolutePath(false)
+	, m_compressionLevel(-1)
+	, m_threadCount(0)
 {
 }
 
@@ -107,6 +109,16 @@ bool SevenZipCompressor::DoCompress(ProgressCallback* callback /*= nullptr*/)
 	return (hr == S_OK) ? true : false;
 }
 
+void SevenZipCompressor::SetCompressionLevel(int level)
+{
+	m_compressionLevel = level;
+}
+
+void SevenZipCompressor::SetThreadCount(unsigned int threadCount)
+{
+	m_threadCount = threadCount;
+}
+
 bool SevenZipCompressor::CheckValidFormat() const
 {
 	if (m_fileList.size() > 1 &&
@@ -161,15 +173,28 @@ bool SevenZipCompressor::SetCompressionProperties(IUnknown* outArchive) const
 		return false;
 	}
 
-	const size_t numProps = 2;
-	const wchar_t* names[numProps];
-	CPropVariant values[numProps];
+	const size_t maxProps = 3;
+	const wchar_t* names[maxProps];
+	CPropVariant values[maxProps];
+	size_t numProps = 0;
 
-	names[0] = { L"x" };
-	values[0] = { static_cast< UInt32 >( m_compressionLevel.GetValue() ) };
+	if ( m_compressionLevel >= 0 )
+	{
+		names[numProps] = L"x";
+		values[numProps] = static_cast< UInt32 >( m_compressionLevel );
+		++numProps;
+	}
 
-	names[1] = { L"he" };
-	values[1] = { m_EncryptHeaders };
+	if ( m_threadCount != 0 )
+	{
+		names[numProps] = L"mt";
+		values[numProps] = static_cast< UInt32 >( m_threadCount );
+		++numProps;
+	}
+
+	names[numProps] = L"he";
+	values[numProps] = m_EncryptHeaders;
+	++numProps;
 
 	CComPtr< ISetProperties > setter;
 	outArchive->QueryInterface( IID_ISetProperties, reinterpret_cast< void** >( &setter ) );

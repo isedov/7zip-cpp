@@ -9,8 +9,7 @@ namespace SevenZip
 		: m_library(library),
 		m_archivePath(archivePath),
 		// The default compression type will be 7z
-		m_compressionFormat(CompressionFormat::SevenZip),
-		m_compressionLevel(CompressionLevel::Normal)
+		m_compressionFormat(CompressionFormat::SevenZip)
 	{
 	}
 
@@ -25,16 +24,6 @@ namespace SevenZip
 		m_OverrideCompressionFormat = true;
 		m_ReadMetadata = false;
 		m_compressionFormat = format;
-	}
-
-	void SevenZipArchive::SetCompressionLevel(const CompressionLevelEnum& level)
-	{
-		m_compressionLevel = level;
-	}
-
-	CompressionLevelEnum SevenZipArchive::GetCompressionLevel()
-	{
-		return m_compressionLevel;
 	}
 
 	void SevenZipArchive::SetEncryptHeaders(bool encryptHeaders)
