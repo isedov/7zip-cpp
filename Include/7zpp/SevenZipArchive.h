@@ -4,7 +4,6 @@
 #include <atlbase.h>
 #include "FileInfo.h"
 #include "CompressionFormat.h"
-#include "CompressionLevel.h"
 
 namespace SevenZip
 {
@@ -19,8 +18,8 @@ namespace SevenZip
 		virtual void SetCompressionFormat(const CompressionFormatEnum& format);
 		virtual CompressionFormatEnum GetCompressionFormat();
 
-		virtual void SetCompressionLevel(const CompressionLevelEnum& level);
-		virtual CompressionLevelEnum GetCompressionLevel();
+		virtual void SetEncryptHeaders(bool encryptHeaders);
+		virtual bool GetEncryptHeaders();
 
 		virtual bool DetectCompressionFormat();
 
@@ -35,11 +34,11 @@ namespace SevenZip
 		const SevenZipLibrary& m_library;
 		TString m_archivePath;
 		CompressionFormatEnum m_compressionFormat;
-		CompressionLevelEnum m_compressionLevel;
 		size_t m_numberofitems = 0;
 		std::vector<std::wstring> m_itemnames;
 		std::vector<size_t> m_origsizes;
 		TString m_password;
+		bool m_EncryptHeaders = false;
 
 	private:
 		bool pri_GetNumberOfItems();

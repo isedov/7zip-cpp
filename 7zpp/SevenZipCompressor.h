@@ -7,7 +7,6 @@
 #include "SevenZipArchive.h"
 #include "FileInfo.h"
 #include "CompressionFormat.h"
-#include "CompressionLevel.h"
 #include "ProgressCallback.h"
 
 
@@ -42,9 +41,16 @@ namespace SevenZip
 		void UseAbsolutePaths(bool absolute) { m_absolutePath = absolute; }
 		bool CheckValidFormat() const;
 
+		// 7-Zip compression level 0-9 (the "x" property); a negative value leaves the 7-Zip default.
+		void SetCompressionLevel(int level);
+		// Encoder thread count (the "mt" property); 0 leaves the 7-Zip default.
+		void SetThreadCount(unsigned int threadCount);
+
 	private:
 		std::vector< intl::FilePathInfo > m_fileList; // list of files to compress
 		bool m_absolutePath;
+		int m_compressionLevel;
+		unsigned int m_threadCount;
 		CComPtr< IStream > OpenArchiveStream() const;
 		bool AddFilesToList(const TString& directory, const TString& searchPattern, const TString& pathPrefix, bool recursion);
 		bool SetCompressionProperties(IUnknown* outArchive) const;

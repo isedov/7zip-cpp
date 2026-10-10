@@ -59,6 +59,11 @@ namespace SevenZip
 		}
 
 		CComPtr< IInArchive > archive = UsefulFunctions::GetArchiveReader(m_library, m_compressionFormat);
+		if (!archive)
+		{
+			return false;	//Format not supported
+		}
+
 		CComPtr< InStreamWrapper > inFile = new InStreamWrapper(archiveStream);
 		CComPtr< ArchiveOpenCallback > openCallback = new ArchiveOpenCallback(m_password);
 
@@ -97,6 +102,11 @@ namespace SevenZip
 													ProgressCallback* callback)
 	{
 		CComPtr< IInArchive > archive = UsefulFunctions::GetArchiveReader( m_library, m_compressionFormat );
+		if (!archive)
+		{
+			return false;	//Format not supported
+		}
+
 		CComPtr< InStreamWrapper > inFile = new InStreamWrapper( archiveStream );
 		CComPtr< ArchiveOpenCallback > openCallback = new ArchiveOpenCallback(m_password);
 
